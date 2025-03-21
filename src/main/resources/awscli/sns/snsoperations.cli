@@ -1,0 +1,25 @@
+# SNS CLI Commands
+
+# 1️⃣ Create SNS Topic
+aws sns create-topic \
+  --name MyJavaTopic \
+  --region ap-south-1
+
+# 2️⃣ List Topics
+aws sns list-topics \
+  --region ap-south-1
+
+# 3️⃣ Publish a Message to Topic
+# Replace <topic-arn> with the ARN returned by create-topic
+aws sns publish \
+  --topic-arn <topic-arn> \
+  --message "Hello from AWS CLI SNS!" \
+  --region ap-south-1
+
+# 4️⃣ Subscribe Email (confirmation required)
+# Replace <topic-arn> and <your-email>
+aws sns subscribe \
+  --topic-arn <topic-arn> \
+  --protocol email \
+  --notification-endpoint your@email.com \
+  --region ap-south-1

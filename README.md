@@ -12,13 +12,17 @@ aws-workshop/
 ├── README.md                        # You're reading it 😄
 ├── scripts/                         # CLI deployment & testing scripts
 │   ├── deploy_lambda_api.sh
-│   └── test_lambda_api.sh
+│   ├── test_lambda_api.sh
+│   ├── dynamodb_script.sh
+│   └── sns_script.sh
 ├── src/
 │   ├── main/
 │   │   ├── java/com/aws/workshop/
 │   │   │   ├── s3/                  # S3 Java code
 │   │   │   ├── ec2/                 # EC2 Java code
-│   │   │   └── lambda/              # Lambda Java code
+│   │   │   ├── lambda/              # Lambda Java code
+│   │   │   ├── dynamodb/            # DynamoDB Java code
+│   │   │   └── sns/                 # SNS Java code
 │   │   └── resources/awscli/        # AWS CLI commands
 ```
 
@@ -58,6 +62,40 @@ Edit `test_lambda_api.sh` and add your generated API Gateway URL:
 ```bash
 chmod +x test_lambda_api.sh
 ./test_lambda_api.sh
+```
+
+---
+
+## 📊 DynamoDB CRUD (Java + CLI)
+
+To test DynamoDB operations via CLI:
+```bash
+cd scripts/
+chmod +x dynamodb_script.sh
+./dynamodb_script.sh
+```
+This script creates a `Students` table and performs insert, fetch, and delete operations.
+
+To run the Java version:
+```bash
+java -cp target/aws-workshop-1.0-SNAPSHOT.jar com.aws.workshop.dynamodb.DynamoDBOperations
+```
+
+---
+
+## 📣 SNS Notifications (Java + CLI)
+
+To test SNS messaging via CLI:
+```bash
+cd scripts/
+chmod +x sns_script.sh
+./sns_script.sh
+```
+This script creates a topic, publishes a message, and subscribes an email (requires inbox confirmation).
+
+To run the Java version:
+```bash
+java -cp target/aws-workshop-1.0-SNAPSHOT.jar com.aws.workshop.sns.SNSOperations
 ```
 
 ---
