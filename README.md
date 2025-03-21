@@ -1,6 +1,6 @@
 # 🧠 AWS Hands-On Workshop (Java + AWS CLI)
 
-Welcome to the **AWS Hands-On Workshop** designed for engineering students. This repo includes Java examples, AWS CLI scripts, and deployment helpers to help you learn AWS by doing.
+Welcome to the **AWS Hands-On Workshop** designed for engineering students. This repo includes Java examples, AWS CLI scripts, CloudFormation templates, and deployment helpers to help you learn AWS by doing.
 
 ---
 
@@ -13,6 +13,8 @@ Welcome to the **AWS Hands-On Workshop** designed for engineering students. This
 - Queue messages with **SQS**
 - Monitor metrics with **CloudWatch**
 - Manage access using **IAM**
+- Set up and connect to **RDS (MySQL)** using EC2
+- Deploy simple infrastructure using **CloudFormation**
 
 ---
 
@@ -37,7 +39,8 @@ aws-workshop/
 │   ├── dynamodb_script.sh
 │   ├── sns_script.sh
 │   ├── sqs_script.sh
-│   └── cloudwatch_script.sh
+│   ├── cloudwatch_script.sh
+│   └── rds_script.sh
 ├── src/main/java/com/aws/workshop/
 │   ├── s3/                        # S3 Java code
 │   ├── ec2/                       # EC2 Java code
@@ -47,7 +50,10 @@ aws-workshop/
 │   ├── sqs/                       # SQS Java code
 │   ├── iam/                       # IAM Java code
 │   └── cloudwatch/               # CloudWatch Java code
-└── resources/awscli/              # CLI command files
+├── resources/
+│   ├── awscli/                    # CLI command files
+│   └── cloudformation/
+│       └── demo_stack.yaml       # Basic EC2 + S3 CloudFormation template
 ```
 
 ---
@@ -127,12 +133,56 @@ java -cp target/aws-workshop-1.0-SNAPSHOT.jar com.aws.workshop.cloudwatch.CloudW
 
 ---
 
+## 🗄️ RDS MySQL (CLI + EC2 Connection)
+```bash
+chmod +x scripts/rds_script.sh
+./scripts/rds_script.sh
+```
+
+To connect from EC2:
+```bash
+# SSH into EC2 instance
+ssh -i your-key.pem ec2-user@<ec2-ip>
+
+# Install MySQL client
+sudo yum install mysql -y  # For Amazon Linux
+
+# Connect to RDS endpoint
+mysql -h <rds-endpoint> -u admin -p
+```
+✅ Make sure RDS security group allows port 3306 from EC2.
+
+---
+
+## 🧱 CloudFormation Demo Template
+We provide a basic CloudFormation template to create:
+- An S3 bucket
+- An EC2 instance
+- A security group allowing SSH
+
+To launch the stack:
+```bash
+aws cloudformation create-stack \
+  --stack-name demo-stack \
+  --template-body file://resources/cloudformation/demo_stack.yaml \
+  --parameters ParameterKey=KeyName,ParameterValue=your-key-name \
+  --capabilities CAPABILITY_NAMED_IAM
+```
+To delete the stack:
+```bash
+aws cloudformation delete-stack --stack-name demo-stack
+```
+✅ Replace `your-key-name` with your actual EC2 key pair.
+
+---
+
 ## 🧪 Mini Practice Assignments
 - Create a new EC2 instance with a different AMI.
 - Upload a file to a new folder in S3 and read it back.
 - Extend Lambda to accept query parameters.
 - Create multiple messages in SQS and process all.
 - Trigger a CloudWatch alarm when a custom metric exceeds a value.
+- Modify the CloudFormation template to add a second EC2 instance.
 
 ---
 
