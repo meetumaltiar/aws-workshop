@@ -53,6 +53,10 @@
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>sns</artifactId>
         </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>sqs</artifactId>
+        </dependency>
         <!-- AWS Lambda Core -->
         <dependency>
             <groupId>com.amazonaws</groupId>

@@ -14,7 +14,8 @@ aws-workshop/
 │   ├── deploy_lambda_api.sh
 │   ├── test_lambda_api.sh
 │   ├── dynamodb_script.sh
-│   └── sns_script.sh
+│   ├── sns_script.sh
+│   └── sqs_script.sh
 ├── src/
 │   ├── main/
 │   │   ├── java/com/aws/workshop/
@@ -22,7 +23,8 @@ aws-workshop/
 │   │   │   ├── ec2/                 # EC2 Java code
 │   │   │   ├── lambda/              # Lambda Java code
 │   │   │   ├── dynamodb/            # DynamoDB Java code
-│   │   │   └── sns/                 # SNS Java code
+│   │   │   ├── sns/                 # SNS Java code
+│   │   │   └── sqs/                 # SQS Java code
 │   │   └── resources/awscli/        # AWS CLI commands
 ```
 
@@ -33,6 +35,7 @@ aws-workshop/
 - Maven
 - AWS CLI (configured via `aws configure`)
 - AWS Free Tier account
+- `jq` installed (for parsing JSON in scripts)
 
 ---
 
@@ -67,7 +70,6 @@ chmod +x test_lambda_api.sh
 ---
 
 ## 📊 DynamoDB CRUD (Java + CLI)
-
 To test DynamoDB operations via CLI:
 ```bash
 cd scripts/
@@ -84,7 +86,6 @@ java -cp target/aws-workshop-1.0-SNAPSHOT.jar com.aws.workshop.dynamodb.DynamoDB
 ---
 
 ## 📣 SNS Notifications (Java + CLI)
-
 To test SNS messaging via CLI:
 ```bash
 cd scripts/
@@ -96,6 +97,22 @@ This script creates a topic, publishes a message, and subscribes an email (requi
 To run the Java version:
 ```bash
 java -cp target/aws-workshop-1.0-SNAPSHOT.jar com.aws.workshop.sns.SNSOperations
+```
+
+---
+
+## 📥 SQS Messaging (Java + CLI)
+To test SQS messaging via CLI:
+```bash
+cd scripts/
+chmod +x sqs_script.sh
+./sqs_script.sh
+```
+This script creates a queue, sends a message, receives it, and deletes it. (Requires `jq` to be installed.)
+
+To run the Java version:
+```bash
+java -cp target/aws-workshop-1.0-SNAPSHOT.jar com.aws.workshop.sqs.SQSOperations
 ```
 
 ---

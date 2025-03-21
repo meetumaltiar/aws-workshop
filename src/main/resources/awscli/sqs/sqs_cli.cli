@@ -1,0 +1,28 @@
+# SQS CLI Commands for MyJavaQueue
+
+# 1️⃣ Create Queue
+aws sqs create-queue \
+  --queue-name MyJavaQueue \
+  --region ap-south-1
+
+# 2️⃣ Get Queue URL
+aws sqs get-queue-url \
+  --queue-name MyJavaQueue \
+  --region ap-south-1
+
+# 3️⃣ Send Message (replace <queue-url>)
+aws sqs send-message \
+  --queue-url <queue-url> \
+  --message-body "Hello from AWS CLI to SQS!" \
+  --region ap-south-1
+
+# 4️⃣ Receive Message
+aws sqs receive-message \
+  --queue-url <queue-url> \
+  --region ap-south-1
+
+# 5️⃣ Delete Message (replace <receipt-handle>)
+aws sqs delete-message \
+  --queue-url <queue-url> \
+  --receipt-handle <receipt-handle> \
+  --region ap-south-1
