@@ -20,22 +20,40 @@ Welcome to the **AWS Hands-On Workshop** designed for engineering students. This
 ---
 
 ## 🧠 Capstone Project: Student Submission Portal
-This project uses API Gateway + Lambda + DynamoDB + SNS.
 
-### 🔧 Setup (Run Once)
+This Capstone app demonstrates how to integrate **Lambda**, **API Gateway**, **DynamoDB**, and **SNS** using Java and AWS CLI.
+
+### 📋 Functionality
+- Student submits name, email, project title, and description.
+- Lambda stores it in DynamoDB table `StudentProjects`.
+- Admin is notified by email via SNS topic `project-submissions`.
+
+### 🔧 Setup Steps
+
+#### ✅ 1. Provision Required Resources
 ```bash
 chmod +x scripts/capstone_deploy.sh
 ./scripts/capstone_deploy.sh
 ```
 This will:
-- Create `StudentProjects` table in DynamoDB
-- Create an SNS topic `project-submissions`
-- Prompt you to enter an email for SNS notifications
+- Create `StudentProjects` DynamoDB table
+- Create `project-submissions` SNS topic
+- Ask for your email to subscribe (confirm in inbox)
 
-### 🖥️ Test with `curl` or Postman
-Replace `<API_ENDPOINT>` with the API Gateway endpoint:
+#### ✅ 2. Deploy Lambda + API Gateway
 ```bash
-curl -X POST <API_ENDPOINT> \
+chmod +x scripts/deploy_capstone_lambda.sh
+./scripts/deploy_capstone_lambda.sh
+```
+This will:
+- Create IAM Role + Lambda Function
+- Configure `/submit` resource on API Gateway
+- Deploy REST API and output public endpoint
+
+### 🧪 Testing the Endpoint
+#### Option A: `curl`
+```bash
+curl -X POST https://<api_id>.execute-api.ap-south-1.amazonaws.com/prod/submit \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Alice",
@@ -44,34 +62,26 @@ curl -X POST <API_ENDPOINT> \
     "description": "Tracks indoor pollution levels in real-time."
   }'
 ```
-You will get a success message from Lambda and an SNS email notification.
+#### Option B: Postman (recommended)
+Import the included **Postman Collection** from `resources/postman/CapstoneCollection.json`
 
 ---
 
-## 📦 Project Structure (updated)
+## 🧳 Capstone Folder Structure
 ```
-aws-workshop/
-├── pom.xml
-├── README.md
-├── scripts/
-│   ├── capstone_deploy.sh
-│   ├── launch_stack.sh
-│   ├── delete_stack.sh
-│   └── ...
-├── src/main/java/com/aws/workshop/
-│   ├── capstone/
-│   │   ├── StudentSubmissionHandler.java
-│   │   ├── model/Submission.java
-│   │   └── service/
-│   │       ├── DynamoDBService.java
-│   │       └── SNSService.java
-└── resources/
-    └── cloudformation/
-        └── demo_stack.yaml
+com/aws/workshop/capstone/
+├── StudentSubmissionHandler.java       # Lambda handler
+├── model/Submission.java               # Data model
+└── service/
+    ├── DynamoDBService.java            # Save to DynamoDB
+    └── SNSService.java                 # Notify via SNS
 ```
 
 ---
 
-All other modules (EC2, S3, DynamoDB, Lambda, SQS, SNS, CloudWatch, IAM, RDS) are documented in sections above. ✅
+## ✅ Results
+- ✅ Project submission is stored in DynamoDB
+- ✅ Admin receives real-time email
+- ✅ Full Java-based Lambda integrated with AWS services
 
-Happy building and presenting your Capstone! 🚀
+Ready for your students to build real-world cloud applications! 🚀

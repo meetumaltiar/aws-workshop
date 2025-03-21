@@ -1,0 +1,31 @@
+{
+  "info": {
+    "name": "AWS Capstone Project",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Submit Student Project",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Alice\",\n  \"email\": \"alice@example.com\",\n  \"projectTitle\": \"IoT Air Quality Monitor\",\n  \"description\": \"Tracks indoor pollution levels in real-time.\"\n}"
+        },
+        "url": {
+          "raw": "https://<api_id>.execute-api.ap-south-1.amazonaws.com/prod/submit",
+          "protocol": "https",
+          "host": ["<api_id>", "execute-api", "ap-south-1", "amazonaws", "com"],
+          "path": ["prod", "submit"]
+        }
+      },
+      "response": []
+    }
+  ]
+}

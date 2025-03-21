@@ -1,0 +1,115 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Capstone Project - Lambda + API Gateway + DynamoDB + SNS
+
+Parameters:
+  AdminEmail:
+    Type: String
+    Description: Email to subscribe to SNS topic
+
+Resources:
+
+  SubmissionTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: StudentProjects
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: email
+          AttributeType: S
+      KeySchema:
+        - AttributeName: email
+          KeyType: HASH
+
+  ProjectSNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: project-submissions
+
+  SNSSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Endpoint: !Ref AdminEmail
+      Protocol: email
+      TopicArn: !Ref ProjectSNSTopic
+
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: lambda-capstone-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+        - arn:aws:iam::aws:policy/AmazonSNSFullAccess
+
+  StudentSubmissionFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: StudentSubmissionFunction
+      Runtime: java17
+      Handler: com.aws.workshop.capstone.StudentSubmissionHandler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Timeout: 10
+      MemorySize: 512
+      Code:
+        S3Bucket: <YOUR_S3_BUCKET>
+        S3Key: <LAMBDA_JAR_PATH>
+
+  APIGatewayRestApi:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: StudentSubmissionAPI
+
+  APIGatewayResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !GetAtt APIGatewayRestApi.RootResourceId
+      PathPart: submit
+      RestApiId: !Ref APIGatewayRestApi
+
+  APIGatewayMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref APIGatewayRestApi
+      ResourceId: !Ref APIGatewayResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub
+          - arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations
+          - {
+            Region: !Ref AWS::Region,
+            LambdaArn: !GetAtt StudentSubmissionFunction.Arn
+          }
+
+  LambdaInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref StudentSubmissionFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${APIGatewayRestApi}/*/POST/submit
+
+  APIDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn: APIGatewayMethod
+    Properties:
+      RestApiId: !Ref APIGatewayRestApi
+      StageName: prod
+
+Outputs:
+  APIEndpoint:
+    Description: URL for POST submissions
+    Value: !Sub https://${APIGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/submit
+
+  SNSConfirm:
+    Description: Confirm the email subscription sent to
+    Value: !Ref AdminEmail
