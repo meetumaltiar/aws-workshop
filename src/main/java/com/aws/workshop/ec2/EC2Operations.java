@@ -1,4 +1,3 @@
-// EC2Operations.java
 package com.aws.workshop.ec2;
 
 import software.amazon.awssdk.regions.Region;
@@ -15,6 +14,12 @@ public class EC2Operations {
 
         // 2️⃣ Launch new EC2 instance (Optional: Uncomment to use)
         //launchInstance(ec2);
+
+        // 3️⃣ Stop an instance (Optional: Uncomment and provide instance ID)
+        //stopInstance(ec2, "i-xxxxxxxxxxxxxxxxx");
+
+        // 4️⃣ Terminate an instance (Optional: Uncomment and provide instance ID)
+        //terminateInstance(ec2, "i-xxxxxxxxxxxxxxxxx");
 
         ec2.close();
     }
@@ -45,5 +50,23 @@ public class EC2Operations {
         RunInstancesResponse response = ec2.runInstances(runRequest);
         String instanceId = response.instances().get(0).instanceId();
         System.out.println("Launched EC2 instance with ID: " + instanceId);
+    }
+
+    public static void stopInstance(Ec2Client ec2, String instanceId) {
+        StopInstancesRequest stopRequest = StopInstancesRequest.builder()
+                .instanceIds(instanceId)
+                .build();
+
+        ec2.stopInstances(stopRequest);
+        System.out.println("Stopping EC2 instance: " + instanceId);
+    }
+
+    public static void terminateInstance(Ec2Client ec2, String instanceId) {
+        TerminateInstancesRequest terminateRequest = TerminateInstancesRequest.builder()
+                .instanceIds(instanceId)
+                .build();
+
+        ec2.terminateInstances(terminateRequest);
+        System.out.println("Terminating EC2 instance: " + instanceId);
     }
 }
