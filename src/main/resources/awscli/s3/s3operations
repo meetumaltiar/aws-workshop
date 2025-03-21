@@ -1,0 +1,16 @@
+// --- AWS CLI Commands for S3 Operations ---
+
+// 1️⃣ Create an S3 Bucket
+aws s3 mb s3://my-cli-s3-bucket
+
+// 2️⃣ Upload a File to S3
+aws s3 cp file.txt s3://my-cli-s3-bucket/
+
+// 3️⃣ List Objects in an S3 Bucket
+aws s3 ls s3://my-cli-s3-bucket/
+
+// 4️⃣ Delete an Object from S3
+aws s3 rm s3://my-cli-s3-bucket/test-file.txt
+
+// 5️⃣ Delete an S3 Bucket (must be empty before deleting)
+aws s3 rb s3://my-cli-s3-bucket --force

@@ -1,0 +1,9 @@
+.classpath
+.idea/
+.project
+.settings/
+aws-workshop.iml
+aws-workshop.ipr
+aws-workshop.iws
+dependency-reduced-pom.xml
+target/
