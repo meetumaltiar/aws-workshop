@@ -15,7 +15,8 @@ aws-workshop/
 │   ├── test_lambda_api.sh
 │   ├── dynamodb_script.sh
 │   ├── sns_script.sh
-│   └── sqs_script.sh
+│   ├── sqs_script.sh
+│   └── cloudwatch_script.sh
 ├── src/
 │   ├── main/
 │   │   ├── java/com/aws/workshop/
@@ -24,7 +25,9 @@ aws-workshop/
 │   │   │   ├── lambda/              # Lambda Java code
 │   │   │   ├── dynamodb/            # DynamoDB Java code
 │   │   │   ├── sns/                 # SNS Java code
-│   │   │   └── sqs/                 # SQS Java code
+│   │   │   ├── sqs/                 # SQS Java code
+│   │   │   ├── iam/                 # IAM Java code
+│   │   │   └── cloudwatch/          # CloudWatch Java code
 │   │   └── resources/awscli/        # AWS CLI commands
 ```
 
@@ -113,6 +116,28 @@ This script creates a queue, sends a message, receives it, and deletes it. (Requ
 To run the Java version:
 ```bash
 java -cp target/aws-workshop-1.0-SNAPSHOT.jar com.aws.workshop.sqs.SQSOperations
+```
+
+---
+
+## 🔐 IAM Operations (Java Only)
+List users, create a user if missing, and attach a read-only policy:
+```bash
+java -cp target/aws-workshop-1.0-SNAPSHOT.jar com.aws.workshop.iam.IAMOperations
+```
+
+---
+
+## 📊 CloudWatch Metrics (Java + CLI)
+To publish a custom metric via CLI:
+```bash
+cd scripts/
+chmod +x cloudwatch_script.sh
+./cloudwatch_script.sh
+```
+To publish a metric via Java:
+```bash
+java -cp target/aws-workshop-1.0-SNAPSHOT.jar com.aws.workshop.cloudwatch.CloudWatchOperations
 ```
 
 ---

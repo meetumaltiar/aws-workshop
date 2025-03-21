@@ -1,0 +1,9 @@
+# CloudWatch CLI Commands
+
+# 1️⃣ Publish a custom metric
+aws cloudwatch put-metric-data \
+  --namespace "AWSWorkshop" \
+  --metric-name "WorkshopMetric" \
+  --value 1 \
+  --unit Count \
+  --region ap-south-1
