@@ -45,7 +45,10 @@
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>ec2</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>dynamodb</artifactId>
+        </dependency>
         <!-- AWS Lambda Core -->
         <dependency>
             <groupId>com.amazonaws</groupId>
