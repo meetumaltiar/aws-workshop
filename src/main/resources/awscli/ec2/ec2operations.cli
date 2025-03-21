@@ -1,0 +1,17 @@
+Launch an EC2 Instance (Free Tier Eligible Amazon Linux 2):
+aws ec2 run-instances \
+  --image-id ami-0c768662cc797cd75 \  # Amazon Linux 2 (Mumbai)
+  --instance-type t2.micro \
+  --key-name my-key-pair \
+  --security-groups my-security-group \
+  --region ap-south-1
+
+List All EC2 Instances:
+aws ec2 describe-instances --query "Reservations[*].Instances[*].[InstanceId,State.Name,InstanceType]" --output table
+
+Stop an Instance:
+aws ec2 stop-instances --instance-ids i-xxxxxxxxxxxxxxxxx
+
+Terminate an Instance:
+aws ec2 terminate-instances --instance-ids i-xxxxxxxxxxxxxxxxx
+
