@@ -1,9 +1,18 @@
 package com.aws.workshop.capstone.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Submission {
+    @JsonProperty("name")
     private String name;
+
+    @JsonProperty("email")
     private String email;
+
+    @JsonProperty("projectTitle")
     private String projectTitle;
+
+    @JsonProperty("description")
     private String description;
 
     public Submission() {}
