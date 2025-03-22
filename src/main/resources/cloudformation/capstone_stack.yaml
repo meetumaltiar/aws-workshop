@@ -58,8 +58,8 @@ Resources:
       Timeout: 10
       MemorySize: 512
       Code:
-        S3Bucket: <YOUR_S3_BUCKET>
-        S3Key: <LAMBDA_JAR_PATH>
+        S3Bucket: maltiar-capstone-bucket
+        S3Key: lambda/aws-workshop-1.0-SNAPSHOT.jar
 
   APIGatewayRestApi:
     Type: AWS::ApiGateway::RestApi

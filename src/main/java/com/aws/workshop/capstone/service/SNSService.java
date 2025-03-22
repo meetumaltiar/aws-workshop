@@ -6,7 +6,7 @@ import software.amazon.awssdk.services.sns.model.PublishRequest;
 
 public class SNSService {
 
-    private static final String TOPIC_ARN = "arn:aws:sns:ap-south-1:123456789012:project-submissions"; // Replace with real ARN
+    private static final String TOPIC_ARN = "arn:aws:sns:ap-south-1:951492729180:project-submissions";
 
     public static void notifyNewSubmission(Submission submission) {
         SnsClient snsClient = SnsClient.create();
