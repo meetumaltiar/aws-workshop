@@ -8,8 +8,7 @@ import java.util.List;
 
 public class SQSOperations {
     public static void main(String[] args) {
-        Region region = Region.AP_SOUTH_1;
-        SqsClient sqsClient = SqsClient.builder().region(region).build();
+        SqsClient sqsClient = SqsClient.builder().region(Region.AP_SOUTH_1).build();
 
         String queueName = "MyJavaQueue";
 

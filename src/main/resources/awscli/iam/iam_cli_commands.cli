@@ -1,0 +1,43 @@
+# --- AWS CLI Commands for IAM Operations ---
+
+# 1️⃣ Create an IAM Role with Trust Policy
+aws iam create-role \
+  --role-name my-lambda-role \
+  --assume-role-policy-document file://lambda-trust-policy.json
+
+# 2️⃣ Attach a Managed Policy to Role (e.g., AWSLambdaBasicExecutionRole)
+aws iam attach-role-policy \
+  --role-name my-lambda-role \
+  --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+# 3️⃣ Attach an Inline Policy to Role (e.g., DynamoDB access)
+aws iam put-role-policy \
+  --role-name my-lambda-role \
+  --policy-name DynamoDBPutItemPolicy \
+  --policy-document file://dynamodb-putitem-policy.json
+
+# 4️⃣ Get Role Details
+aws iam get-role \
+  --role-name my-lambda-role
+
+# 5️⃣ List Attached Policies
+aws iam list-attached-role-policies \
+  --role-name my-lambda-role
+
+# 6️⃣ List Inline Policies
+aws iam list-role-policies \
+  --role-name my-lambda-role
+
+# 7️⃣ Detach a Managed Policy from Role
+aws iam detach-role-policy \
+  --role-name my-lambda-role \
+  --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+# 8️⃣ Delete Inline Policy
+aws iam delete-role-policy \
+  --role-name my-lambda-role \
+  --policy-name DynamoDBPutItemPolicy
+
+# 9️⃣ Delete the Role
+aws iam delete-role \
+  --role-name my-lambda-role

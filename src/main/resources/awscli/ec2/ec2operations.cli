@@ -1,17 +1,27 @@
-Launch an EC2 Instance (Free Tier Eligible Amazon Linux 2):
+# -----------------------------------------
+# EC2 Operations via AWS CLI
+# -----------------------------------------
+
+# 1️⃣ Launch an EC2 Instance (Amazon Linux 2 – Free Tier Eligible)
 aws ec2 run-instances \
-  --image-id ami-0c768662cc797cd75 \  # Amazon Linux 2 (Mumbai)
+  --image-id ami-0c768662cc797cd75 \
   --instance-type t2.micro \
-  --key-name my-key-pair \
-  --security-groups my-security-group \
+  --key-name my-key \
+  --security-group-ids sg-06b8961f9dd1435fe \
   --region ap-south-1
 
-List All EC2 Instances:
-aws ec2 describe-instances --query "Reservations[*].Instances[*].[InstanceId,State.Name,InstanceType]" --output table
+# 2️⃣ List All EC2 Instances
+aws ec2 describe-instances \
+  --query "Reservations[*].Instances[*].[InstanceId,State.Name,InstanceType,PublicIpAddress]" \
+  --output table \
+  --region ap-south-1
 
-Stop an Instance:
-aws ec2 stop-instances --instance-ids i-xxxxxxxxxxxxxxxxx
+# 3️⃣ Stop an EC2 Instance
+aws ec2 stop-instances \
+  --instance-ids i-xxxxxxxxxxxxxxxxx \
+  --region ap-south-1
 
-Terminate an Instance:
-aws ec2 terminate-instances --instance-ids i-xxxxxxxxxxxxxxxxx
-
+# 4️⃣ Terminate an EC2 Instance
+aws ec2 terminate-instances \
+  --instance-ids i-xxxxxxxxxxxxxxxxx \
+  --region ap-south-1

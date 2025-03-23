@@ -9,8 +9,7 @@ import java.time.Duration;
 public class EC2Operations {
 
     public static void main(String[] args) throws InterruptedException {
-        Region region = Region.AP_SOUTH_1;
-        Ec2Client ec2 = Ec2Client.builder().region(region).build();
+        Ec2Client ec2 = Ec2Client.builder().region(Region.AP_SOUTH_1).build();
 
         // Step 1️⃣ Launch instance
         String instanceId = launchInstance(ec2);
