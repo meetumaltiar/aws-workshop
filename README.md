@@ -25,7 +25,7 @@ This is a hands-on AWS workshop designed for developers and students. Using **Ja
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/aws-workshop.git
+git clone https://github.com/meetumaltiar/aws-workshop.git
 cd aws-workshop
 
 # Build the project using Maven
@@ -88,22 +88,34 @@ src/
 ```bash
 # Upload Lambda JAR to S3
 aws s3 mb s3://maltiar-capstone-bucket --region ap-south-1
-aws s3 cp target/aws-workshop-1.0-SNAPSHOT.jar   s3://maltiar-capstone-bucket/lambda/aws-workshop-1.0-SNAPSHOT.jar
+aws s3 cp target/aws-workshop-1.0-SNAPSHOT.jar \
+         s3://maltiar-capstone-bucket/lambda/aws-workshop-1.0-SNAPSHOT.jar
 
 # Deploy stack
-aws cloudformation create-stack   --stack-name capstone-stack   --template-body file://src/main/resources/cloudformation/capstone_stack.yaml   --capabilities CAPABILITY_NAMED_IAM   --region ap-south-1   --parameters ParameterKey=AdminEmail,ParameterValue=alpha.meetu.aws@gmail.com
+aws cloudformation create-stack \
+    --stack-name capstone-stack \
+    --template-body file://src/main/resources/cloudformation/capstone_stack.yaml \
+    --capabilities CAPABILITY_NAMED_IAM \
+    --region ap-south-1 \
+    --parameters ParameterKey=AdminEmail,ParameterValue=alpha.meetu.aws@gmail.com
 ```
 
 ### 🔍 Get API Gateway URL
 
 ```bash
-aws cloudformation describe-stacks   --stack-name capstone-stack   --region ap-south-1   --query "Stacks[0].Outputs[?OutputKey=='APIEndpoint'].OutputValue"   --output text
+aws cloudformation describe-stacks \
+    --stack-name capstone-stack \
+    --region ap-south-1 \
+    --query "Stacks[0].Outputs[?OutputKey=='APIEndpoint'].OutputValue" \
+    --output text
 ```
 
 ### 📤 Submit a Test Project (using curl)
 
 ```bash
-curl -X POST <API_URL_FROM_ABOVE>   -H "Content-Type: application/json"   -d '{
+curl -X POST <API_URL_FROM_ABOVE> \
+  -H "Content-Type: application/json" \
+  -d '{
     "name": "John Doe",
     "email": "john.doe@gmail.com",
     "projectTitle": "Resume Project",
@@ -117,21 +129,43 @@ A prebuilt Postman collection is available for API testing. Import it from the `
 
 ---
 
-## 🧹 Cleanup Resources
+## 🌐 Capstone EC2 Static Website
 
-```bash
-./scripts/cleanup_all.sh
+A lightweight capstone that launches an EC2 instance, sets up Apache, and deploys a static `index.html` site.
+
+### 🧰 Location
+```
+capstone-ec2-static-site/
+ ├── website/             <-- HTML files
+ └── scripts/             <-- launch_instance.sh & cleanup_instance.sh
 ```
 
----
+### 🚀 To Deploy
+```bash
+cd capstone-ec2-static-site/scripts
+./launch_instance.sh
+```
+
+### 🌍 Access Website
+
+Open the public IP output from the script in your browser.
+
+### 🧹 Cleanup
+```bash
+./cleanup_instance.sh
+```
+
+> 💡 Tip: You can add a cron job or scheduler to auto-delete test EC2 instances.
 
 ## 🙌 Author
 
 **Meetu Maltiar**  
-Speaker, AWS Workshop | [GitHub](https://github.com/meetumaltiar) | [LinkedIn](https://www.linkedin.com/in/mmaltiar/)
+Speaker, AWS Workshop  
+[GitHub](https://github.com/meetumaltiar) · [LinkedIn](https://www.linkedin.com/in/mmaltiar/) · [Slideshare](https://www.slideshare.net/meetumaltiar)
 
 ---
 
 ## 🏁 License
 
 This project is licensed under the MIT License.
+
