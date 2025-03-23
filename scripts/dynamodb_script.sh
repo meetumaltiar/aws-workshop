@@ -3,7 +3,7 @@
 REGION="ap-south-1"
 TABLE_NAME="Students"
 
-# 1️⃣ Create Table
+echo "🔧 Creating DynamoDB table '$TABLE_NAME'..."
 aws dynamodb create-table \
   --table-name $TABLE_NAME \
   --attribute-definitions AttributeName=studentId,AttributeType=S \
@@ -11,19 +11,25 @@ aws dynamodb create-table \
   --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
   --region $REGION || true
 
-# 2️⃣ Insert Item
+echo "⏳ Waiting for table '$TABLE_NAME' to become ACTIVE..."
+aws dynamodb wait table-exists \
+  --table-name $TABLE_NAME \
+  --region $REGION
+echo "✅ Table '$TABLE_NAME' is now ACTIVE."
+
+echo "📥 Inserting item into '$TABLE_NAME'..."
 aws dynamodb put-item \
   --table-name $TABLE_NAME \
   --item '{"studentId": {"S": "101"}, "name": {"S": "Meetu"}, "email": {"S": "meetu@example.com"}}' \
   --region $REGION
 
-# 3️⃣ Get Item
+echo "🔍 Retrieving item..."
 aws dynamodb get-item \
   --table-name $TABLE_NAME \
   --key '{"studentId": {"S": "101"}}' \
   --region $REGION
 
-# 4️⃣ Delete Item
+echo "🗑️ Deleting item..."
 aws dynamodb delete-item \
   --table-name $TABLE_NAME \
   --key '{"studentId": {"S": "101"}}' \

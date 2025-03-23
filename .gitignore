@@ -7,3 +7,4 @@ aws-workshop.ipr
 aws-workshop.iws
 dependency-reduced-pom.xml
 target/
+*.pem

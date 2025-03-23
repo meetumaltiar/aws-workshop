@@ -1,0 +1,10 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Effect": "Allow",
+    "Action": [
+      "dynamodb:PutItem"
+    ],
+    "Resource": "arn:aws:dynamodb:ap-south-1:951492729180:table/StudentProjects"
+  }]
+}
