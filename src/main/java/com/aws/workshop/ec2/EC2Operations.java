@@ -4,61 +4,41 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.ec2.Ec2Client;
 import software.amazon.awssdk.services.ec2.model.*;
 
+import java.time.Duration;
+
 public class EC2Operations {
-    public static void main(String[] args) {
-        Region region = Region.AP_SOUTH_1; // Mumbai region
+
+    public static void main(String[] args) throws InterruptedException {
+        Region region = Region.AP_SOUTH_1;
         Ec2Client ec2 = Ec2Client.builder().region(region).build();
 
-        // 1️⃣ Describe running EC2 instances
-        describeInstances(ec2);
+        // Step 1️⃣ Launch instance
+        String instanceId = launchInstance(ec2);
 
-        // 2️⃣ Launch new EC2 instance (Optional: Uncomment to use)
-        //launchInstance(ec2);
+        // Step 2️⃣ Wait (simulate workload)
+        System.out.println("⏳ Instance running. Sleeping for 1 minute...");
+        Thread.sleep(Duration.ofMinutes(1).toMillis());
 
-        // 3️⃣ Stop an instance (Optional: Uncomment and provide instance ID)
-        //stopInstance(ec2, "i-xxxxxxxxxxxxxxxxx");
-
-        // 4️⃣ Terminate an instance (Optional: Uncomment and provide instance ID)
-        //terminateInstance(ec2, "i-xxxxxxxxxxxxxxxxx");
+        // Step 3️⃣ Terminate instance
+        terminateInstance(ec2, instanceId);
 
         ec2.close();
     }
 
-    public static void describeInstances(Ec2Client ec2) {
-        DescribeInstancesRequest request = DescribeInstancesRequest.builder().build();
-        DescribeInstancesResponse response = ec2.describeInstances(request);
-
-        System.out.println("Listing EC2 Instances:");
-        for (Reservation reservation : response.reservations()) {
-            for (Instance instance : reservation.instances()) {
-                System.out.printf("- Instance ID: %s, State: %s, Type: %s\n",
-                        instance.instanceId(), instance.state().name(), instance.instanceType());
-            }
-        }
-    }
-
-    public static void launchInstance(Ec2Client ec2) {
+    public static String launchInstance(Ec2Client ec2) {
         RunInstancesRequest runRequest = RunInstancesRequest.builder()
-                .imageId("ami-0c768662cc797cd75") // Amazon Linux 2 (Mumbai)
+                .imageId("ami-0c768662cc797cd75") // ✅ Amazon Linux 2 (Mumbai)
                 .instanceType(InstanceType.T2_MICRO)
                 .maxCount(1)
                 .minCount(1)
-                .keyName("my-key-pair") // Replace with your key pair name
-                .securityGroups("my-security-group") // Replace with your security group
+                .keyName("my-key") // ✅ Replace with your real key pair
+                .securityGroupIds("sg-my-security-group") // ✅ Your actual security group
                 .build();
 
         RunInstancesResponse response = ec2.runInstances(runRequest);
         String instanceId = response.instances().get(0).instanceId();
-        System.out.println("Launched EC2 instance with ID: " + instanceId);
-    }
-
-    public static void stopInstance(Ec2Client ec2, String instanceId) {
-        StopInstancesRequest stopRequest = StopInstancesRequest.builder()
-                .instanceIds(instanceId)
-                .build();
-
-        ec2.stopInstances(stopRequest);
-        System.out.println("Stopping EC2 instance: " + instanceId);
+        System.out.println("✅ Launched EC2 instance with ID: " + instanceId);
+        return instanceId;
     }
 
     public static void terminateInstance(Ec2Client ec2, String instanceId) {
@@ -67,6 +47,6 @@ public class EC2Operations {
                 .build();
 
         ec2.terminateInstances(terminateRequest);
-        System.out.println("Terminating EC2 instance: " + instanceId);
+        System.out.println("🗑️ Terminated EC2 instance: " + instanceId);
     }
 }
